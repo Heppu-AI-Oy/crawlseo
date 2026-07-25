@@ -39,6 +39,10 @@ RUN npm run build
 FROM base AS runner
 WORKDIR /app
 ENV NODE_ENV=production
+# curl is not in node:*-alpine, but orchestrators (Coolify, and the healthcheck
+# in docker-compose.yml) reach for it to probe /api/health. Without it the
+# container is reported unhealthy despite serving correctly.
+RUN apk add --no-cache curl
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 COPY --from=builder /app/public ./public
