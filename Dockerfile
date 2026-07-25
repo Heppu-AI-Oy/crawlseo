@@ -38,6 +38,8 @@ COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 # without it the CLI falls back to prisma/schema.prisma, which is copied above.)
 COPY --from=builder /app/node_modules/prisma ./node_modules/prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
+# Entry point for external schedulers (Coolify Scheduled Tasks etc.).
+COPY --from=builder /app/scripts/cron-trigger.mjs ./scripts/cron-trigger.mjs
 USER nextjs
 EXPOSE 3000
 ENV PORT=3000
